@@ -36,10 +36,9 @@
 
     .container {
       width: 100%;
-      max-width: 640px;
+      max-width: 800px;
     }
 
-    /* HEADER / PROFILE */
     .header {
       margin-bottom: 48px;
     }
@@ -72,7 +71,6 @@
       color: var(--fg);
     }
 
-    /* Развернутое описание */
     .name-block p {
       font-size: 14.5px;
       color: var(--muted);
@@ -81,7 +79,6 @@
       max-width: 95%;
     }
 
-    /* SOCIAL LINKS */
     .socials {
       display: flex;
       gap: 16px;
@@ -107,9 +104,9 @@
       fill: currentColor;
     }
 
-    /* NAVIGATION TABS (Оставил только одну для вида, чтобы потом легко вернуть вторую) */
     .tabs {
       display: flex;
+      justify-content: center;
       gap: 24px;
       margin-bottom: 32px;
       border-bottom: 1px solid var(--border);
@@ -142,7 +139,6 @@
       background: var(--fg);
     }
 
-    /* MODELING GALLERY */
     .stats {
       display: flex;
       gap: 24px;
@@ -164,7 +160,6 @@
       align-items: center;
     }
 
-    /* --- Стили для плавной прокрутки 3+ --- */
     .scroll-counter-wrapper {
       display: inline-flex;
       height: 20px; 
@@ -175,7 +170,7 @@
       display: flex;
       flex-direction: column;
       line-height: 20px;
-      transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1); /* Очень плавное замедление */
+      transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1);
       transform: translateY(0);
     }
     .scroll-counter-list span {
@@ -185,7 +180,6 @@
       justify-content: center;
     }
 
-    /* Анимация курсора для эффекта печати */
     .typing-cursor {
       display: inline-block;
       width: 2px;
@@ -215,7 +209,7 @@
       overflow: hidden;
       border-radius: 8px;
       background: var(--border);
-      cursor: zoom-in; /* Указатель лупы */
+      cursor: zoom-in;
     }
 
     .work-img {
@@ -243,21 +237,21 @@
       line-height: 1.4;
     }
 
-    /* MODAL (Лайтбокс для картинок) */
     .modal {
       display: none;
       position: fixed;
       z-index: 999;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(5px);
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(10px);
       opacity: 0;
       transition: opacity 0.3s ease;
       justify-content: center;
       align-items: center;
+      padding: 20px;
     }
 
     .modal.show {
@@ -265,9 +259,9 @@
     }
 
     .modal-content {
-      max-width: 90%;
-      max-height: 90vh;
-      border-radius: 8px;
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 4px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
       transform: scale(0.95);
       transition: transform 0.3s ease;
@@ -279,11 +273,11 @@
     }
 
     .close-modal {
-      position: absolute;
-      top: 20px;
-      right: 30px;
+      position: fixed;
+      top: 30px;
+      right: 40px;
       color: #fff;
-      font-size: 40px;
+      font-size: 50px;
       font-weight: 300;
       cursor: pointer;
       z-index: 1000;
@@ -294,12 +288,12 @@
       color: var(--muted);
     }
 
-    /* FOOTER */
     .footer {
       margin-top: 64px;
       padding-top: 24px;
       font-size: 12px;
       color: var(--muted);
+      text-align: center;
     }
 
     @media (max-width: 600px) {
@@ -311,8 +305,6 @@
 <body>
 
   <div class="container">
-    
-    <!-- HEADER -->
     <header class="header">
       <div class="profile-info">
         <div class="avatar">LR</div>
@@ -334,22 +326,18 @@
       </div>
     </header>
 
-    <!-- NAVIGATION (Оставил пока только 3D Modeling) -->
     <nav class="tabs">
       <button class="tab active">3D Modeling</button>
     </nav>
 
-    <!-- MODELING SECTION -->
     <main>
       <section id="modeling">
         <div class="stats">
           <div class="stat-item">
-            <!-- Место для анимации 400+ -->
             <span id="typewriter-text"></span><span id="typing-cursor" class="typing-cursor"></span> 
             <span style="color: var(--muted); font-weight: normal; margin-left: 4px;">hrs in Blender</span>
           </div>
           <div class="stat-item">
-            <!-- Место для анимации 3+ (Плавная прокрутка) -->
             <div class="scroll-counter-wrapper">
               <div class="scroll-counter-list" id="years-counter">
                 <span>0</span>
@@ -363,17 +351,15 @@
         </div>
 
         <div class="gallery">
-          <!-- Карточка 1 -->
           <article class="work-item">
             <div class="work-img-wrapper">
-              <img src="/images/rs51.png" alt="rs51" class="work-img">
+              <img src="/images/rs51.png" alt="rs51" class="work-img" onerror="this.src='https://placehold.co/600x450/111111/888888?text=rs51'">
             </div>
           </article>
 
-          <!-- Карточка 2 -->
           <article class="work-item">
             <div class="work-img-wrapper">
-              <img src="/images/steamprofile.png" alt="Character Set" class="work-img">
+              <img src="/images/steamprofile.png" alt="Steam Profile" class="work-img" onerror="this.src='https://placehold.co/600x450/111111/888888?text=Steam+Profile'">
             </div>
             <div class="work-info">
               <h3>My steam profile</h3>
@@ -381,10 +367,9 @@
             </div>
           </article>
 
-          <!-- Карточка 3 -->
           <article class="work-item">
             <div class="work-img-wrapper">
-              <img src="/images/b1" alt="Weapon Pack" class="work-img">
+              <img src="/images/b1.png" alt="Steam Profile Declined" class="work-img" onerror="this.src='https://placehold.co/600x450/111111/888888?text=b1'">
             </div>
             <div class="work-info">
               <h3>Steam profile</h3>
@@ -392,27 +377,64 @@
             </div>
           </article>
 
-          <!-- Карточка 4 -->
           <article class="work-item">
             <div class="work-img-wrapper">
-              <img src="/images/sawed_off" alt="Tavern" class="work-img">
+              <img src="/images/sawed_off.png" alt="Sawed off" class="work-img" onerror="this.src='https://placehold.co/600x450/111111/888888?text=sawed_off'">
             </div>
             <div class="work-info">
-              <h3>ps1 Sawed off </h3>
+              <h3>ps1 Sawed off</h3>
               <p>From the ps1 style category.</p>
+            </div>
+          </article>
+
+          <article class="work-item">
+            <div class="work-img-wrapper">
+              <img src="/images/Sheet.png" alt="Sheet 1" class="work-img" onerror="this.src='https://placehold.co/600x450/1a1a1a/555555?text=Sheet'">
+            </div>
+            <div class="work-info">
+              <h3>Sheet</h3>
+              <p>Unfinished and restored models sheet.</p>
+            </div>
+          </article>
+
+          <article class="work-item">
+            <div class="work-img-wrapper">
+              <img src="/images/sheet2.png" alt="Sheet 2" class="work-img" onerror="this.src='https://placehold.co/600x450/1a1a1a/555555?text=sheet2'">
+            </div>
+            <div class="work-info">
+              <h3>Sheet 2</h3>
+              <p>Unfinished and restored models sheet.</p>
+            </div>
+          </article>
+
+          <article class="work-item">
+            <div class="work-img-wrapper">
+              <img src="/images/fenazepam.png" alt="Fenazepam" class="work-img" onerror="this.src='https://placehold.co/600x450/1a1a1a/555555?text=fenazepam'">
+            </div>
+            <div class="work-info">
+              <h3>Fenazepam</h3>
+              <p>Custom 3D model creation.</p>
+            </div>
+          </article>
+
+          <article class="work-item">
+            <div class="work-img-wrapper">
+              <img src="/images/shlapaugc.png" alt="Shlapaugc" class="work-img" onerror="this.src='https://placehold.co/600x450/1a1a1a/555555?text=shlapaugc'">
+            </div>
+            <div class="work-info">
+              <h3>Shlapaugc</h3>
+              <p>Game-ready asset.</p>
             </div>
           </article>
         </div>
       </section>
     </main>
 
-    <!-- FOOTER -->
     <footer class="footer">
       © 2026 lerinvct.
     </footer>
   </div>
 
-  <!-- MODAL FOR IMAGES -->
   <div id="imageModal" class="modal">
     <span class="close-modal">&times;</span>
     <img class="modal-content" id="modalImg">
@@ -420,8 +442,6 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      
-      /* --- 1. АНИМАЦИЯ ПЕЧАТАНИЯ ДЛЯ "400+" --- */
       const textToType = "400+";
       const typewriterElement = document.getElementById("typewriter-text");
       const cursorElement = document.getElementById("typing-cursor");
@@ -431,46 +451,38 @@
         if (typeIndex < textToType.length) {
           typewriterElement.textContent += textToType.charAt(typeIndex);
           typeIndex++;
-          setTimeout(typeWriter, 150); // Скорость печати
+          setTimeout(typeWriter, 150);
         } else {
-          // Когда напечаталось, скрываем курсор через 1 секунду
           setTimeout(() => {
             cursorElement.style.display = 'none';
           }, 1000);
         }
       }
 
-      /* --- 2. АНИМАЦИЯ ПЛАВНОЙ ПРОКРУТКИ ДЛЯ "3+" --- */
       function startScrollCounter() {
         const counterList = document.getElementById("years-counter");
-        // Прокручиваем на 3 элемента вниз (3 * 20px = 60px)
         counterList.style.transform = "translateY(-60px)";
       }
 
-      // Запуск анимаций с небольшой задержкой после загрузки
       setTimeout(() => {
         typeWriter();
         startScrollCounter();
       }, 400);
 
-      /* --- 3. ЛОГИКА МОДАЛЬНОГО ОКНА ДЛЯ ФОТО --- */
       const modal = document.getElementById('imageModal');
       const modalImg = document.getElementById('modalImg');
       const images = document.querySelectorAll('.work-img-wrapper');
       const closeBtn = document.querySelector('.close-modal');
 
-      // Открытие модалки при клике
       images.forEach(wrapper => {
         wrapper.addEventListener('click', function() {
           const img = this.querySelector('img');
           modal.style.display = 'flex';
-          // Небольшой таймаут для плавного появления
           setTimeout(() => modal.classList.add('show'), 10);
           modalImg.src = img.src;
         });
       });
 
-      // Закрытие модалки
       function closeModal() {
         modal.classList.remove('show');
         setTimeout(() => modal.style.display = 'none', 300);
@@ -478,7 +490,6 @@
 
       closeBtn.addEventListener('click', closeModal);
       
-      // Закрытие при клике по фону
       modal.addEventListener('click', function(e) {
         if (e.target !== modalImg) {
           closeModal();
