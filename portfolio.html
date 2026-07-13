@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>lerinvct — Roblox Dev & 3D Artist</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --bg: #000000;
+      --fg: #ededed;
+      --muted: #888888;
+      --border: #222222;
+      --hover-bg: #111111;
+      --accent: #ffffff;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 60px 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 640px;
+    }
+
+    /* HEADER / PROFILE */
+    .header {
+      margin-bottom: 48px;
+    }
+
+    .profile-info {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .name-block h1 {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      color: var(--fg);
+    }
+
+    /* Развернутое описание */
+    .name-block p {
+      font-size: 14.5px;
+      color: var(--muted);
+      margin-top: 6px;
+      line-height: 1.5;
+      max-width: 95%;
+    }
+
+    /* SOCIAL LINKS */
+    .socials {
+      display: flex;
+      gap: 16px;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 13px;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .social-link:hover {
+      color: var(--accent);
+    }
+
+    .social-link svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    /* NAVIGATION TABS (Оставил только одну для вида, чтобы потом легко вернуть вторую) */
+    .tabs {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1px;
+    }
+
+    .tab {
+      background: none;
+      border: none;
+      padding: 0 0 12px 0;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      position: relative;
+      transition: color 0.2s ease;
+    }
+
+    .tab.active {
+      color: var(--fg);
+    }
+
+    .tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--fg);
+    }
+
+    /* MODELING GALLERY */
+    .stats {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 32px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+    }
+
+    .stat-item span {
+      color: var(--fg);
+      font-weight: 600;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    /* --- Стили для плавной прокрутки 3+ --- */
+    .scroll-counter-wrapper {
+      display: inline-flex;
+      height: 20px; 
+      overflow: hidden;
+      margin-right: 4px;
+    }
+    .scroll-counter-list {
+      display: flex;
+      flex-direction: column;
+      line-height: 20px;
+      transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1); /* Очень плавное замедление */
+      transform: translateY(0);
+    }
+    .scroll-counter-list span {
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Анимация курсора для эффекта печати */
+    .typing-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 14px;
+      background-color: var(--fg);
+      margin-left: 2px;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .work-item {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .work-img-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      border-radius: 8px;
+      background: var(--border);
+      cursor: zoom-in; /* Указатель лупы */
+    }
+
+    .work-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+      display: block;
+    }
+
+    .work-img-wrapper:hover .work-img {
+      transform: scale(1.05);
+    }
+
+    .work-info h3 {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--fg);
+      margin-bottom: 4px;
+    }
+
+    .work-info p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    /* MODAL (Лайтбокс для картинок) */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(5px);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal.show {
+      opacity: 1;
+    }
+
+    .modal-content {
+      max-width: 90%;
+      max-height: 90vh;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      transform: scale(0.95);
+      transition: transform 0.3s ease;
+      object-fit: contain;
+    }
+
+    .modal.show .modal-content {
+      transform: scale(1);
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: #fff;
+      font-size: 40px;
+      font-weight: 300;
+      cursor: pointer;
+      z-index: 1000;
+      transition: color 0.2s;
+    }
+
+    .close-modal:hover {
+      color: var(--muted);
+    }
+
+    /* FOOTER */
+    .footer {
+      margin-top: 64px;
+      padding-top: 24px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 600px) {
+      .gallery { grid-template-columns: 1fr; }
+      body { padding: 40px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- HEADER -->
+    <header class="header">
+      <div class="profile-info">
+        <div class="avatar">LR</div>
+        <div class="name-block">
+          <h1>lerinvct</h1>
+          <p>Roblox Developer & 3D Artist specializing in low-poly environments, stylized characters, and high-quality game assets. Passionate about bringing creative visions to life through optimized and immersive visual design.</p>
+        </div>
+      </div>
+
+      <div class="socials">
+        <a class="social-link" href="https://www.roblox.com/users/lerin_vct222/profile" target="_blank">
+          <svg viewBox="0 0 24 24"><path d="M5.4 2.1l13.2 3.3 3.3 13.2-13.2-3.3zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
+          Roblox
+        </a>
+        <a class="social-link" href="https://discord.com/users/huiglot2" target="_blank">
+          <svg viewBox="0 0 24 24"><path d="M20.3 4.3c-1.8-.8-3.7-1.4-5.7-1.5-.2.4-.4.9-.6 1.3-1.9-.3-3.9-.3-5.8 0-.2-.5-.4-.9-.6-1.3-2 .1-3.9.7-5.7 1.5C.7 8.5-.2 12.2.1 15.8c2.1 1.5 4.2 2.5 6.2 3.1.5-.7.9-1.4 1.2-2.2-.7-.3-1.3-.6-1.9-1 .1-.1.3-.2.4-.3 3.8 1.8 7.9 1.8 11.6 0 .1.1.3.2.4.3-.6.4-1.3.7-1.9 1 .3.8.7 1.5 1.2 2.2 2-.6 4.1-1.6 6.2-3.1.4-3.6-.5-7.3-2.5-11.5zM8.5 13.5c-.9 0-1.7-.8-1.7-1.8s.8-1.8 1.7-1.8 1.7.8 1.7 1.8-.8 1.8-1.7 1.8zm7 0c-.9 0-1.7-.8-1.7-1.8s.8-1.8 1.7-1.8 1.7.8 1.7 1.8-.8 1.8-1.7 1.8z"/></svg>
+          Discord
+        </a>
+      </div>
+    </header>
+
+    <!-- NAVIGATION (Оставил пока только 3D Modeling) -->
+    <nav class="tabs">
+      <button class="tab active">3D Modeling</button>
+    </nav>
+
+    <!-- MODELING SECTION -->
+    <main>
+      <section id="modeling">
+        <div class="stats">
+          <div class="stat-item">
+            <!-- Место для анимации 400+ -->
+            <span id="typewriter-text"></span><span id="typing-cursor" class="typing-cursor"></span> 
+            <span style="color: var(--muted); font-weight: normal; margin-left: 4px;">hrs in Blender</span>
+          </div>
+          <div class="stat-item">
+            <!-- Место для анимации 3+ (Плавная прокрутка) -->
+            <div class="scroll-counter-wrapper">
+              <div class="scroll-counter-list" id="years-counter">
+                <span>0</span>
+                <span>1</span>
+                <span>2</span>
+                <span>3+</span>
+              </div>
+            </div>
+            <span style="color: var(--muted); font-weight: normal;">years exp</span>
+          </div>
+        </div>
+
+        <div class="gallery">
+          <!-- Карточка 1 -->
+          <article class="work-item">
+            <div class="work-img-wrapper">
+              <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=600&fit=crop" alt="Cyberpunk Street" class="work-img">
+            </div>
+            <div class="work-info">
+              <h3>Cyberpunk Street</h3>
+              <p>Low-poly environment modular pack.</p>
+            </div>
+          </article>
+
+          <!-- Карточка 2 -->
+          <article class="work-item">
+            <div class="work-img-wrapper">
+              <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&h=600&fit=crop" alt="Character Set" class="work-img">
+            </div>
+            <div class="work-info">
+              <h3>Stylized Characters</h3>
+              <p>Avatars with hand-painted textures for Roblox.</p>
+            </div>
+          </article>
+
+          <!-- Карточка 3 -->
+          <article class="work-item">
+            <div class="work-img-wrapper">
+              <img src="https://images.unsplash.com/photo-1614726365723-49cfae988cc3?w=800&h=600&fit=crop" alt="Weapon Pack" class="work-img">
+            </div>
+            <div class="work-info">
+              <h3>Melee Weapons Pack</h3>
+              <p>Custom normal maps and PBR materials.</p>
+            </div>
+          </article>
+
+          <!-- Карточка 4 -->
+          <article class="work-item">
+            <div class="work-img-wrapper">
+              <img src="https://images.unsplash.com/photo-1618172193763-c511deb5ca96?w=800&h=600&fit=crop" alt="Tavern" class="work-img">
+            </div>
+            <div class="work-info">
+              <h3>Fantasy Tavern</h3>
+              <p>Interior scene with baked lighting.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      © 2026 lerinvct.
+    </footer>
+  </div>
+
+  <!-- MODAL FOR IMAGES -->
+  <div id="imageModal" class="modal">
+    <span class="close-modal">&times;</span>
+    <img class="modal-content" id="modalImg">
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      
+      /* --- 1. АНИМАЦИЯ ПЕЧАТАНИЯ ДЛЯ "400+" --- */
+      const textToType = "400+";
+      const typewriterElement = document.getElementById("typewriter-text");
+      const cursorElement = document.getElementById("typing-cursor");
+      let typeIndex = 0;
+
+      function typeWriter() {
+        if (typeIndex < textToType.length) {
+          typewriterElement.textContent += textToType.charAt(typeIndex);
+          typeIndex++;
+          setTimeout(typeWriter, 150); // Скорость печати
+        } else {
+          // Когда напечаталось, скрываем курсор через 1 секунду
+          setTimeout(() => {
+            cursorElement.style.display = 'none';
+          }, 1000);
+        }
+      }
+
+      /* --- 2. АНИМАЦИЯ ПЛАВНОЙ ПРОКРУТКИ ДЛЯ "3+" --- */
+      function startScrollCounter() {
+        const counterList = document.getElementById("years-counter");
+        // Прокручиваем на 3 элемента вниз (3 * 20px = 60px)
+        counterList.style.transform = "translateY(-60px)";
+      }
+
+      // Запуск анимаций с небольшой задержкой после загрузки
+      setTimeout(() => {
+        typeWriter();
+        startScrollCounter();
+      }, 400);
+
+      /* --- 3. ЛОГИКА МОДАЛЬНОГО ОКНА ДЛЯ ФОТО --- */
+      const modal = document.getElementById('imageModal');
+      const modalImg = document.getElementById('modalImg');
+      const images = document.querySelectorAll('.work-img-wrapper');
+      const closeBtn = document.querySelector('.close-modal');
+
+      // Открытие модалки при клике
+      images.forEach(wrapper => {
+        wrapper.addEventListener('click', function() {
+          const img = this.querySelector('img');
+          modal.style.display = 'flex';
+          // Небольшой таймаут для плавного появления
+          setTimeout(() => modal.classList.add('show'), 10);
+          modalImg.src = img.src;
+        });
+      });
+
+      // Закрытие модалки
+      function closeModal() {
+        modal.classList.remove('show');
+        setTimeout(() => modal.style.display = 'none', 300);
+      }
+
+      closeBtn.addEventListener('click', closeModal);
+      
+      // Закрытие при клике по фону
+      modal.addEventListener('click', function(e) {
+        if (e.target !== modalImg) {
+          closeModal();
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
